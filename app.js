@@ -123,7 +123,7 @@ function prompt() {
 
 const term = $("body").terminal(dispatch, {
   exit: false,
-  greetings: "Try [[;green;]'help'] to see all available commands.\n",
+  greetings: false,
   completion,
   prompt,
 });
