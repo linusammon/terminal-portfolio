@@ -1,0 +1,10 @@
+.terminal {
+  --color: #fff;
+  --background: #000;
+  --size: 1.5;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+}
+
+.command {
+  cursor: pointer;
+}
