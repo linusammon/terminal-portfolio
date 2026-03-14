@@ -3,6 +3,7 @@ class Command {
     this.name = name;
     this.help = help;
     this.man = man;
+    this.aliases = aliases;
     this.run = run;
   }
 }
