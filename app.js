@@ -248,16 +248,19 @@ function walkPath(parts) {
 const commands = [
   new Command({
     name: "help",
-    help: "List commands",
-    man: `NAME
-      help - list available commands
+    help: "List all available commands",
+    man: `<bold>NAME</bold>
+  help - list all available commands
 
-SYNOPSIS
-      help
+<bold>SYNOPSIS</bold>
+  help
 
-DESCRIPTION
-      Displays a list of available commands along with a short
-      description of each command.`,
+<bold>DESCRIPTION</bold>
+  Displays a list of all available commands
+  along with a short description for each.
+
+<bold>SEE ALSO</bold>
+  man - display the manual page for a command`,
     run() {
       registry.get("cat").run(["~/help.txt"]);
     },
@@ -265,20 +268,18 @@ DESCRIPTION
 
   new Command({
     name: "man",
-    help: "Show command manual",
-    man: `NAME
-      man - display manual pages for commands
+    help: "Display the manual page for a command",
+    man: `<bold>NAME</bold>
+  man - display the manual page for a command
 
-SYNOPSIS
-      man [command]
+<bold>SYNOPSIS</bold>
+  man COMMAND
 
-DESCRIPTION
-      Displays the manual page for the specified command.
-      Manual pages provide detailed documentation about a command,
-      including usage, description, and options.
+<bold>DESCRIPTION</bold>
+  Displays the manual page for the specified command.
 
-SEE ALSO
-      help`,
+<bold>SEE ALSO</bold>
+  help - list all available commands`,
     run([name]) {
       const cmd = registry.get(name);
 
@@ -292,17 +293,19 @@ SEE ALSO
 
   new Command({
     name: "ls",
-    help: "List directory contents",
-    man: `NAME
-      ls - list directory contents
+    help: "List directory contents horizontally",
+    man: `<bold>NAME</bold>
+  ls - list directory contents horizontally
 
-SYNOPSIS
-      ls
+<bold>SYNOPSIS</bold>
+  ls
 
-DESCRIPTION
-      Lists the contents of the current working directory.
-      Files and directories are printed in a single line separated
-      by spaces. Directories are indicated by a trailing '/'.`,
+<bold>DESCRIPTION</bold>
+  Lists the contents of the current directory horizontally.
+
+<bold>SEE ALSO</bold>
+  ll - list directory contents vertically
+  tree - prints directory tree`,
     run() {
       const dir = getNode(cwd);
 
@@ -317,16 +320,19 @@ DESCRIPTION
 
   new Command({
     name: "ll",
-    help: "List directory contents (one per line)",
-    man: `NAME
-      ll - list directory contents one per line
+    help: "List directory contents vertically",
+    man: `<bold>NAME</bold>
+  ll - list directory contents vertically
 
-SYNOPSIS
-      ll
+<bold>SYNOPSIS</bold>
+  ll
 
-DESCRIPTION
-      Lists the contents of the current directory with one entry
-      per line. Directories are indicated by a trailing '/'.`,
+<bold>DESCRIPTION</bold>
+  Lists the contents of the current directory vertically.
+
+<bold>SEE ALSO</bold>
+  ls - list directory contents horizontally
+  tree - prints directory tree`,
     run() {
       const dir = getNode(cwd);
 
@@ -338,34 +344,20 @@ DESCRIPTION
   }),
 
   new Command({
-    name: "pwd",
-    help: "Print working directory",
-    man: `NAME
-      pwd - print working directory
-
-SYNOPSIS
-      pwd
-
-DESCRIPTION
-      Prints the absolute path of the current working directory.`,
-    run() {
-      term.echo("/" + cwd.join("/"));
-    },
-  }),
-
-  new Command({
     name: "tree",
-    help: "Display directory tree",
-    man: `NAME
-      tree - display directory tree
+    help: "Prints directory tree",
+    man: `<bold>NAME</bold>
+  tree - prints directory tree
 
-SYNOPSIS
-      tree [directory]
+<bold>SYNOPSIS</bold>
+  tree DIRECTORY
 
-DESCRIPTION
-      Recursively lists the contents of a directory in a tree-like
-      format. If no directory is specified, the current directory
-      is used. Directories are shown with a trailing '/'.`,
+<bold>DESCRIPTION</bold>
+  Recursively lists the contents of a directory in a tree-likeformat.
+
+<bold>SEE ALSO</bold>
+  ls - list directory contents horizontally
+  ll - list directory contents vertically`,
     run([path = ""]) {
       const target = resolvePath(path);
       const targetStr = target.join("/");
@@ -425,18 +417,32 @@ DESCRIPTION
   }),
 
   new Command({
+    name: "pwd",
+    help: "Prints working directory",
+    man: `<bold>NAME</bold>
+  pwd - prints working directory
+
+<bold>SYNOPSIS</bold>
+  pwd
+
+<bold>DESCRIPTION</bold>
+  Prints the absolute path of the current working directory.`,
+    run() {
+      term.echo("/" + cwd.join("/"));
+    },
+  }),
+
+  new Command({
     name: "cd",
     help: "Change directory",
-    man: `NAME
-      cd - change the working directory
+    man: `<bold>NAME</bold>
+  cd - change directory
 
-SYNOPSIS
-      cd [directory]
+<bold>SYNOPSIS</bold>
+  cd DIRECTORY
 
-DESCRIPTION
-      Changes the current working directory to the specified
-      directory. If no directory is specified, the command
-      changes to the user's home directory (~).`,
+<bold>DESCRIPTION</bold>
+  Changes the current working directory.`,
     run([path = "~"]) {
       const target = resolvePath(path);
       const targetStr = target.join("/");
@@ -458,17 +464,18 @@ DESCRIPTION
 
   new Command({
     name: "mkdir",
-    help: "Create directory",
-    man: `NAME
-      mkdir - create a new directory
+    help: "Create a new directory",
+    man: `<bold>NAME</bold>
+  mkdir - create a new directory
 
-SYNOPSIS
-      mkdir directory
+<bold>SYNOPSIS</bold>
+  mkdir DIRECTORY
 
-DESCRIPTION
-      Creates a new directory at the specified path. Any
-      intermediate directories that do not exist will be
-      created automatically.`,
+<bold>DESCRIPTION</bold>
+  Creates a new directory at the specified path.
+
+<bold>SEE ALSO</bold>
+   touch - create an new file`,
     run([path]) {
       if (!path) {
         term.echo(`<red>usage: mkdir PATH</red>`);
@@ -482,15 +489,18 @@ DESCRIPTION
 
   new Command({
     name: "touch",
-    help: "Create file",
-    man: `NAME
-      touch - create an empty file
+    help: "Create a new file",
+    man: `<bold>NAME</bold>
+  touch - create a new file
 
-SYNOPSIS
-      touch file
+<bold>SYNOPSIS</bold>
+  touch FILE
 
-DESCRIPTION
-      Creates a new empty file at the specified path.`,
+<bold>DESCRIPTION</bold>
+  Creates a new file at the specified path.
+
+<bold>SEE ALSO</bold>
+  mkdir - create a new directory`,
     run([path]) {
       const target = resolvePath(path);
       const targetStr = target.join("/");
@@ -507,15 +517,15 @@ DESCRIPTION
 
   new Command({
     name: "cat",
-    help: "Show file contents",
-    man: `NAME
-      cat - display file contents
+    help: "Prints file contents",
+    man: `<bold>NAME</bold>
+  cat - prints file contents
 
-SYNOPSIS
-      cat file
+<bold>SYNOPSIS</bold>
+  cat FILE
 
-DESCRIPTION
-      Prints the contents of the specified file to the terminal.`,
+<bold>DESCRIPTION</bold>
+  Prints the contents of the specified file to the terminal.`,
     run([path]) {
       const target = resolvePath(path);
       const targetStr = target.join("/");
@@ -537,15 +547,15 @@ DESCRIPTION
 
   new Command({
     name: "rm",
-    help: "Remove file or directory",
-    man: `NAME
-      rm - remove files or directories
+    help: "Removes files or directories",
+    man: `<bold>NAME</bold>
+  rm - removes files or directories
 
-SYNOPSIS
-      rm path
+<bold>SYNOPSIS</bold>
+  rm PATH
 
-DESCRIPTION
-      Removes the specified file or directory.`,
+<bold>DESCRIPTION</bold>
+  Removes the specified file or directory.`,
     run([name]) {
       const target = resolvePath(name);
       const file = target.pop();
