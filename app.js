@@ -1,7 +1,5 @@
-const colors = {
-  green: "#29FF29",
-  red: "#FF2929",
-};
+$.terminal.xml_formatter.tags.red = (attrs) => "[[;#FF2929;]";
+$.terminal.xml_formatter.tags.green = (attrs) => "[[;#29FF29;]";
 
 class Command {
   constructor({ name, help = "", man = "", aliases = [], run }) {
@@ -31,7 +29,7 @@ function dispatch(input) {
   const cmd = registry.get(name);
 
   if (!cmd) {
-    term.echo(`[[;${colors.red};]command not found: ${name}]`);
+    term.echo(`<red>command not found: ${name}</red>`);
     return;
   }
 
@@ -123,7 +121,7 @@ function prompt() {
     path = "~" + path.slice(`/home/${user}`.length);
   }
 
-  return `[[;${colors.green};]${user}@portfolio:${path}$ ]`;
+  return `<green>${user}@portfolio:${path}$ </green>`;
 }
 
 const term = $("body").terminal(dispatch, {
@@ -237,7 +235,7 @@ function walkPath(parts) {
     if (!node.children[part]) {
       node.children[part] = { type: "dir", children: {} };
     } else if (node.children[part].type !== "dir") {
-      term.echo(`[[;${colors.red};]not a directory: ${current.join("/")}]`);
+      term.echo(`<red>not a directory: ${current.join("/")}</red>`);
       return;
     }
 
@@ -285,7 +283,7 @@ SEE ALSO
       const cmd = registry.get(name);
 
       if (!cmd) {
-        term.echo(`[[;${colors.red};]usage: man <command>]`);
+        term.echo(`<red>usage: man COMMAND</red>`);
         return;
       }
       registry.get("cat").run([`~/manuals/${cmd.name}.txt`]);
@@ -374,12 +372,12 @@ DESCRIPTION
       const node = getNode(target);
 
       if (!node) {
-        term.echo(`[[;${colors.red};]does not exist: ${targetStr}]`);
+        term.echo(`<red>does not exist: ${targetStr}</red>`);
         return;
       }
 
       if (node.type !== "dir") {
-        term.echo(`[[;${colors.red};]not a directory: ${targetStr}]`);
+        term.echo(`<red>not a directory: ${targetStr}</red>`);
         return;
       }
 
@@ -445,12 +443,12 @@ DESCRIPTION
       const node = getNode(target);
 
       if (!node) {
-        term.echo(`[[;${colors.red};]does not exist: ${targetStr}]`);
+        term.echo(`<red>does not exist: ${targetStr}</red>`);
         return;
       }
 
       if (node.type !== "dir") {
-        term.echo(`[[;${colors.red};]not a directory: ${targetStr}]`);
+        term.echo(`<red>not a directory: ${targetStr}</red>`);
         return;
       }
 
@@ -473,7 +471,7 @@ DESCRIPTION
       created automatically.`,
     run([path]) {
       if (!path) {
-        term.echo(`[[;${colors.red};]usage: mkdir <path>]`);
+        term.echo(`<red>usage: mkdir PATH</red>`);
         return;
       }
 
@@ -502,7 +500,7 @@ DESCRIPTION
       if (!dir.children[file]) {
         dir.children[file] = { type: "file", content: "" };
       } else {
-        term.echo(`[[;${colors.red};]already exists: ${targetStr}]`);
+        term.echo(`<red>already exists: ${targetStr}</red>`);
       }
     },
   }),
@@ -524,12 +522,12 @@ DESCRIPTION
       const node = getNode(target);
 
       if (!node) {
-        term.echo(`[[;${colors.red};]not found: ${targetStr}]`);
+        term.echo(`<red>not found: ${targetStr}</red>`);
         return;
       }
 
       if (node.type !== "file") {
-        term.echo(`[[;${colors.red};]not a file: ${targetStr}]`);
+        term.echo(`<red>not a file: ${targetStr}</red>`);
         return;
       }
 
@@ -554,7 +552,7 @@ DESCRIPTION
       const dir = getNode(target);
 
       if (!dir?.children[file]) {
-        term.echo(`[[;${colors.red};]not found: ${target.join("/")}]`);
+        term.echo(`<red>not found: ${target.join("/")}</red>`);
         return;
       }
 
