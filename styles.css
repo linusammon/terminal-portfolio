@@ -1,6 +1,7 @@
 .terminal {
   --color: #ffffff;
   --background: #0f0f0f;
+  --glow: 0.15;
   --size: 1.5;
   font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
 }
