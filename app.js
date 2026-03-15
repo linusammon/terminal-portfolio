@@ -254,8 +254,7 @@ SYNOPSIS
 
 DESCRIPTION
       Displays a list of available commands along with a short
-      description of each command. For detailed documentation
-      of a specific command, use the man command.`,
+      description of each command.`,
     run() {
       registry.get("cat").run(["~/help.txt"]);
     },
@@ -273,8 +272,7 @@ SYNOPSIS
 DESCRIPTION
       Displays the manual page for the specified command.
       Manual pages provide detailed documentation about a command,
-      including usage, description, and options. If the command
-      does not exist, an error message will be displayed.
+      including usage, description, and options.
 
 SEE ALSO
       help`,
@@ -487,8 +485,7 @@ SYNOPSIS
       touch file
 
 DESCRIPTION
-      Creates a new empty file at the specified path. If the
-      file already exists, an error is shown.`,
+      Creates a new empty file at the specified path.`,
     run([path]) {
       const parts = resolvePath(path);
       const file = parts.pop();
@@ -512,9 +509,7 @@ SYNOPSIS
       cat file
 
 DESCRIPTION
-      Prints the contents of the specified file to the terminal.
-      An error is displayed if the path is not a file or does
-      not exist.`,
+      Prints the contents of the specified file to the terminal.`,
     run([path]) {
       const target = resolvePath(path);
       const node = getNode(target);
@@ -543,8 +538,7 @@ SYNOPSIS
       rm path
 
 DESCRIPTION
-      Removes the specified file or directory. If the path does
-      not exist, an error message is displayed.`,
+      Removes the specified file or directory.`,
     run([name]) {
       const parts = resolvePath(name);
       const file = parts.pop();
