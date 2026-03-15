@@ -1,3 +1,8 @@
+const colors = {
+  green: "#29FF29",
+  red: "#FF2929",
+};
+
 class Command {
   constructor({ name, help = "", man = "", aliases = [], run }) {
     this.name = name;
@@ -26,7 +31,7 @@ function dispatch(input) {
   const cmd = registry.get(name);
 
   if (!cmd) {
-    term.error(`command not found: ${name}`);
+    term.echo(`[[;${colors.red};]command not found: ${name}]`);
     return;
   }
 
@@ -118,7 +123,7 @@ function prompt() {
     path = "~" + path.slice(`/home/${user}`.length);
   }
 
-  return `[[;green;]${user}@portfolio:${path}$ ]`;
+  return `[[;${colors.green};]${user}@portfolio:${path}$ ]`;
 }
 
 const term = $("body").terminal(dispatch, {
@@ -232,7 +237,7 @@ function walkPath(parts) {
     if (!node.children[part]) {
       node.children[part] = { type: "dir", children: {} };
     } else if (node.children[part].type !== "dir") {
-      term.error(`${current.join("/")} exists and is not a directory`);
+      term.echo(`[[;${colors.red};]not a directory: ${current.join("/")}]`);
       return;
     }
 
@@ -280,7 +285,7 @@ SEE ALSO
       const cmd = registry.get(name);
 
       if (!cmd) {
-        term.error(`usage: man <command>`);
+        term.echo(`[[;${colors.red};]usage: man <command>]`);
         return;
       }
       registry.get("cat").run([`~/manuals/${cmd.name}.txt`]);
@@ -365,15 +370,16 @@ DESCRIPTION
       is used. Directories are shown with a trailing '/'.`,
     run([path = ""]) {
       const target = resolvePath(path);
+      const targetStr = target.join("/");
       const node = getNode(target);
 
       if (!node) {
-        term.error(`${target.join("/")} does not exist`);
+        term.echo(`[[;${colors.red};]does not exist: ${targetStr}]`);
         return;
       }
 
       if (node.type !== "dir") {
-        term.error(`${target.join("/")} is not a directory`);
+        term.echo(`[[;${colors.red};]not a directory: ${targetStr}]`);
         return;
       }
 
@@ -435,15 +441,16 @@ DESCRIPTION
       changes to the user's home directory (~).`,
     run([path = "~"]) {
       const target = resolvePath(path);
+      const targetStr = target.join("/");
       const node = getNode(target);
 
       if (!node) {
-        term.error("directory does not exist");
+        term.echo(`[[;${colors.red};]does not exist: ${targetStr}]`);
         return;
       }
 
       if (node.type !== "dir") {
-        term.error("not a directory");
+        term.echo(`[[;${colors.red};]not a directory: ${targetStr}]`);
         return;
       }
 
@@ -466,7 +473,7 @@ DESCRIPTION
       created automatically.`,
     run([path]) {
       if (!path) {
-        term.error("mkdir: missing operand");
+        term.echo(`[[;${colors.red};]usage: mkdir <path>]`);
         return;
       }
 
@@ -487,14 +494,15 @@ SYNOPSIS
 DESCRIPTION
       Creates a new empty file at the specified path.`,
     run([path]) {
-      const parts = resolvePath(path);
-      const file = parts.pop();
-      const dir = walkPath(parts);
+      const target = resolvePath(path);
+      const targetStr = target.join("/");
+      const file = target.pop();
+      const dir = walkPath(target);
 
       if (!dir.children[file]) {
         dir.children[file] = { type: "file", content: "" };
       } else {
-        term.error(`${path} already exists`);
+        term.echo(`[[;${colors.red};]already exists: ${targetStr}]`);
       }
     },
   }),
@@ -512,15 +520,16 @@ DESCRIPTION
       Prints the contents of the specified file to the terminal.`,
     run([path]) {
       const target = resolvePath(path);
+      const targetStr = target.join("/");
       const node = getNode(target);
 
       if (!node) {
-        term.error("file not found");
+        term.echo(`[[;${colors.red};]not found: ${targetStr}]`);
         return;
       }
 
       if (node.type !== "file") {
-        term.error("not a file");
+        term.echo(`[[;${colors.red};]not a file: ${targetStr}]`);
         return;
       }
 
@@ -540,12 +549,12 @@ SYNOPSIS
 DESCRIPTION
       Removes the specified file or directory.`,
     run([name]) {
-      const parts = resolvePath(name);
-      const file = parts.pop();
-      const dir = getNode(parts);
+      const target = resolvePath(name);
+      const file = target.pop();
+      const dir = getNode(target);
 
       if (!dir?.children[file]) {
-        term.error("not found");
+        term.echo(`[[;${colors.red};]not found: ${target.join("/")}]`);
         return;
       }
 
