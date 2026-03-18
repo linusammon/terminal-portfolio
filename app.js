@@ -225,26 +225,6 @@ function getNode(pathArray) {
   return node;
 }
 
-function walkPath(parts) {
-  let node = fileSystem;
-  let current = [];
-
-  for (let part of parts) {
-    current.push(part);
-
-    if (!node.children[part]) {
-      node.children[part] = { type: "dir", children: {} };
-    } else if (node.children[part].type !== "dir") {
-      term.echo(`<red>not a directory: ${current.join("/")}</red>`);
-      return;
-    }
-
-    node = node.children[part];
-  }
-
-  return node;
-}
-
 function printFile(path) {
   const target = resolvePath(path);
   const targetStr = target.join("/");
@@ -482,59 +462,6 @@ const commands = [
   }),
 
   new Command({
-    name: "mkdir",
-    help: "Creates a new directory",
-    man: `<bold>NAME</bold>
-  mkdir - creates a new directory
-
-<bold>SYNOPSIS</bold>
-  mkdir DIRECTORY
-
-<bold>DESCRIPTION</bold>
-  Creates a new directory at the specified path.
-
-<bold>SEE ALSO</bold>
-   touch - create an new file`,
-    run([path]) {
-      if (!path) {
-        term.echo(`<red>usage: mkdir PATH</red>`);
-        return;
-      }
-
-      const parts = resolvePath(path);
-      walkPath(parts);
-    },
-  }),
-
-  new Command({
-    name: "touch",
-    help: "Creates a new file",
-    man: `<bold>NAME</bold>
-  touch - creates a new file
-
-<bold>SYNOPSIS</bold>
-  touch FILE
-
-<bold>DESCRIPTION</bold>
-  Creates a new file at the specified path.
-
-<bold>SEE ALSO</bold>
-  mkdir - create a new directory`,
-    run([path]) {
-      const target = resolvePath(path);
-      const targetStr = target.join("/");
-      const file = target.pop();
-      const dir = walkPath(target);
-
-      if (!dir.children[file]) {
-        dir.children[file] = { type: "file", content: "" };
-      } else {
-        term.echo(`<red>already exists: ${targetStr}</red>`);
-      }
-    },
-  }),
-
-  new Command({
     name: "cat",
     help: "Prints file contents",
     man: `<bold>NAME</bold>
@@ -547,31 +474,6 @@ const commands = [
   Prints the contents of the specified file to the terminal.`,
     run([path]) {
       printFile(path);
-    },
-  }),
-
-  new Command({
-    name: "rm",
-    help: "Removes files or directories",
-    man: `<bold>NAME</bold>
-  rm - removes files or directories
-
-<bold>SYNOPSIS</bold>
-  rm PATH
-
-<bold>DESCRIPTION</bold>
-  Removes the specified file or directory.`,
-    run([name]) {
-      const target = resolvePath(name);
-      const file = target.pop();
-      const dir = getNode(target);
-
-      if (!dir?.children[file]) {
-        term.echo(`<red>not found: ${target.join("/")}</red>`);
-        return;
-      }
-
-      delete dir.children[file];
     },
   }),
 ];
