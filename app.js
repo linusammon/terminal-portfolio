@@ -131,7 +131,7 @@ const term = $("body").terminal(dispatch, {
   prompt,
 });
 
-function generateManContent(cmd) {
+function getManContent(cmd) {
   return cmd.man || `No manual entry for ${cmd.name}`;
 }
 
@@ -149,18 +149,18 @@ function generateHelpContent() {
 }
 
 function generateDocs() {
-  const home = fileSystem.children.home.children.guest;
+  const dir = fileSystem.children.usr.children.local.children.share;
 
   registry.forEach((cmd, name) => {
     if (name === cmd.name) {
-      home.children.manuals.children[`${cmd.name}.txt`] = {
+      dir.children.man.children[`${cmd.name}.txt`] = {
         type: "file",
-        content: generateManContent(cmd),
+        content: getManContent(cmd),
       };
     }
   });
 
-  home.children["help.txt"] = {
+  dir.children["help.txt"] = {
     type: "file",
     content: generateHelpContent(),
   };
@@ -174,13 +174,27 @@ const fileSystem = {
       children: {
         guest: {
           type: "dir",
+          children: {},
+        },
+      },
+    },
+    usr: {
+      type: "dir",
+      children: {
+        local: {
+          type: "dir",
           children: {
-            "help.txt": {
-              type: "file",
-            },
-            manuals: {
+            share: {
               type: "dir",
-              children: {},
+              children: {
+                "help.txt": {
+                  type: "file",
+                },
+                man: {
+                  type: "dir",
+                  children: {},
+                },
+              },
             },
           },
         },
@@ -259,7 +273,7 @@ const commands = [
 <bold>SEE ALSO</bold>
   man - display the manual page for a command`,
     run() {
-      printFile("~/help.txt");
+      printFile("/usr/local/share/help.txt");
     },
   }),
 
@@ -284,7 +298,8 @@ const commands = [
         term.echo(`<red>usage: man COMMAND</red>`);
         return;
       }
-      printFile(`~/manuals/${cmd.name}.txt`);
+
+      printFile(`/usr/local/share/man/${cmd.name}.txt`);
     },
   }),
 
