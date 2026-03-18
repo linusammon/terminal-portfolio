@@ -245,6 +245,25 @@ function walkPath(parts) {
   return node;
 }
 
+function printFile(path) {
+  const target = resolvePath(path);
+  const targetStr = target.join("/");
+  const node = getNode(target);
+
+  if (!node) {
+    term.echo(`<red>not found: ${targetStr}</red>`);
+    return;
+  }
+
+  if (node.type !== "file") {
+    term.echo(`<red>not a file: ${targetStr}</red>`);
+    return;
+  }
+
+  term.echo(node.content);
+  return;
+}
+
 const commands = [
   new Command({
     name: "help",
@@ -262,7 +281,7 @@ const commands = [
 <bold>SEE ALSO</bold>
   man - display the manual page for a command`,
     run() {
-      registry.get("cat").run(["~/help.txt"]);
+      printFile("~/help.txt");
     },
   }),
 
@@ -287,7 +306,7 @@ const commands = [
         term.echo(`<red>usage: man COMMAND</red>`);
         return;
       }
-      registry.get("cat").run([`~/manuals/${cmd.name}.txt`]);
+      printFile(`~/manuals/${cmd.name}.txt`);
     },
   }),
 
@@ -527,21 +546,7 @@ const commands = [
 <bold>DESCRIPTION</bold>
   Prints the contents of the specified file to the terminal.`,
     run([path]) {
-      const target = resolvePath(path);
-      const targetStr = target.join("/");
-      const node = getNode(target);
-
-      if (!node) {
-        term.echo(`<red>not found: ${targetStr}</red>`);
-        return;
-      }
-
-      if (node.type !== "file") {
-        term.echo(`<red>not a file: ${targetStr}</red>`);
-        return;
-      }
-
-      term.echo(node.content);
+      printFile(path);
     },
   }),
 
