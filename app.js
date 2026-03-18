@@ -351,7 +351,7 @@ const commands = [
   tree DIRECTORY
 
 <bold>DESCRIPTION</bold>
-  Recursively lists the contents of a directory in a tree-likeformat.
+  Recursively lists the contents of a directory in a tree-like format.
 
 <bold>SEE ALSO</bold>
   ls - list directory contents horizontally
