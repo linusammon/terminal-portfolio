@@ -241,7 +241,6 @@ function printFile(path) {
   }
 
   term.echo(node.content);
-  return;
 }
 
 const commands = [
