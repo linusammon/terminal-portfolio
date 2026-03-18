@@ -248,9 +248,9 @@ function walkPath(parts) {
 const commands = [
   new Command({
     name: "help",
-    help: "List all available commands",
+    help: "Lists all available commands",
     man: `<bold>NAME</bold>
-  help - list all available commands
+  help - lists all available commands
 
 <bold>SYNOPSIS</bold>
   help
@@ -268,9 +268,9 @@ const commands = [
 
   new Command({
     name: "man",
-    help: "Display the manual page for a command",
+    help: "Displays the manual page for a command",
     man: `<bold>NAME</bold>
-  man - display the manual page for a command
+  man - displays the manual page for a command
 
 <bold>SYNOPSIS</bold>
   man COMMAND
@@ -293,9 +293,9 @@ const commands = [
 
   new Command({
     name: "ls",
-    help: "List directory contents horizontally",
+    help: "Lists directory contents horizontally",
     man: `<bold>NAME</bold>
-  ls - list directory contents horizontally
+  ls - lists directory contents horizontally
 
 <bold>SYNOPSIS</bold>
   ls
@@ -320,9 +320,9 @@ const commands = [
 
   new Command({
     name: "ll",
-    help: "List directory contents vertically",
+    help: "Lists directory contents vertically",
     man: `<bold>NAME</bold>
-  ll - list directory contents vertically
+  ll - lists directory contents vertically
 
 <bold>SYNOPSIS</bold>
   ll
@@ -434,9 +434,9 @@ const commands = [
 
   new Command({
     name: "cd",
-    help: "Change directory",
+    help: "Changes directory",
     man: `<bold>NAME</bold>
-  cd - change directory
+  cd - changes directory
 
 <bold>SYNOPSIS</bold>
   cd DIRECTORY
@@ -464,9 +464,9 @@ const commands = [
 
   new Command({
     name: "mkdir",
-    help: "Create a new directory",
+    help: "Creates a new directory",
     man: `<bold>NAME</bold>
-  mkdir - create a new directory
+  mkdir - creates a new directory
 
 <bold>SYNOPSIS</bold>
   mkdir DIRECTORY
@@ -489,9 +489,9 @@ const commands = [
 
   new Command({
     name: "touch",
-    help: "Create a new file",
+    help: "Creates a new file",
     man: `<bold>NAME</bold>
-  touch - create a new file
+  touch - creates a new file
 
 <bold>SYNOPSIS</bold>
   touch FILE
