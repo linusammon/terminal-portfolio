@@ -177,7 +177,6 @@ const fileSystem = {
           children: {
             "help.txt": {
               type: "file",
-              children: {},
             },
             manuals: {
               type: "dir",
