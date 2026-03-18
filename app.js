@@ -174,7 +174,52 @@ const fileSystem = {
       children: {
         guest: {
           type: "dir",
-          children: {},
+          children: {
+            "about.txt": {
+              type: "file",
+              content: `
+Hey, I'm Linus! No, not <i>that</i> Linus :p
+I enjoy tinkering with NixOS and tend to abstract things to hell ¯\\_(ツ)_/¯
+              `,
+            },
+            "contact.txt": {
+              type: "file",
+              content: `
+You can find me here:
+
+ <bold>-</bold> Github: <white>https://github.com/linusammon</white>
+ <bold>-</bold> Discord: <white>https://discord.com/users/243274146316943360</white>
+ <bold>-</bold> Email: <white>contact@lammon.ch</white>
+`,
+            },
+            "skills.txt": {
+              type: "file",
+              content: `
+<bold>Languages</bold>:
+ <bold>-</bold> Java
+ <bold>-</bold> JavaScript
+ <bold>-</bold> TypeScript
+
+<bold>Web Development</bold>:
+ <bold>-</bold> HTML
+ <bold>-</bold> (S)CSS
+ <bold>-</bold> Bootstrap
+ <bold>-</bold> Angular
+ <bold>-</bold> Spring Boot
+
+<bold>Tools & Cloud</bold>:
+ <bold>-</bold> Git
+ <bold>-</bold> Nix
+ <bold>-</bold> Docker
+ <bold>-</bold> Kubernetes
+
+<bold>DevOps & CI/CD</bold>:
+ <bold>-</bold> Jenkins
+ <bold>-</bold> GitLab CI/CD
+ <bold>-</bold> GitHub
+`,
+            },
+          },
         },
       },
     },
@@ -257,6 +302,54 @@ function printFile(path) {
 }
 
 const commands = [
+  new Command({
+    name: "about",
+    help: "A little bit about me",
+    man: `<bold>NAME</bold>
+  about - a little bit about me
+
+<bold>SYNOPSIS</bold>
+  about
+
+<bold>DESCRIPTION</bold>
+  Shows some information about me.`,
+    run() {
+      printFile("~/about.txt");
+    },
+  }),
+
+  new Command({
+    name: "contact",
+    help: "Ways to reach me",
+    man: `<bold>NAME</bold>
+  contact - ways to reach me
+
+<bold>SYNOPSIS</bold>
+  contact
+
+<bold>DESCRIPTION</bold>
+  Displays my contact information`,
+    run() {
+      printFile("~/contact.txt");
+    },
+  }),
+
+  new Command({
+    name: "skills",
+    help: "My technical skills",
+    man: `<bold>NAME</bold>
+  skills - my technical skills
+
+<bold>SYNOPSIS</bold>
+  skills
+
+<bold>DESCRIPTION</bold>
+  Shows my technical skills sorted by category.`,
+    run() {
+      printFile("~/skills.txt");
+    },
+  }),
+
   new Command({
     name: "help",
     help: "Lists all available commands",
