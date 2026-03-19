@@ -1,10 +1,22 @@
 $.terminal.xml_formatter.tags.red = (attrs) => "[[;#FF2929;]";
 $.terminal.xml_formatter.tags.green = (attrs) => "[[;#29FF29;]";
 
+const WELCOME = `
+Welcome to my little corner of the internet.
+It's like a terminal. Kinda. Close enough.
+
+Where to start:
+
+ <bold>-</bold> about
+ <bold>-</bold> skills
+ <bold>-</bold> contact
+
+Type <green>'help'</green> for a list of all commands.
+`;
+
 class Command {
-  constructor({ name, help = "", man = "", aliases = [], run }) {
+  constructor({ name, man = "", aliases = [], run }) {
     this.name = name;
-    this.help = help;
     this.man = man;
     this.aliases = aliases;
     this.run = run;
@@ -129,6 +141,13 @@ const term = $("body").terminal(dispatch, {
   greetings: false,
   completion,
   prompt,
+  onInit: async function (term) {
+    await term.enter("cat ~/welcome.txt", {
+      typing: true,
+      delay: 50,
+    });
+    term.echo(WELCOME);
+  },
 });
 
 function getManContent(cmd) {
@@ -136,16 +155,14 @@ function getManContent(cmd) {
 }
 
 function generateHelpContent() {
-  let text = "";
+  let commands = Array.from(registry.keys())
+    .filter((name, index, self) => self.indexOf(name) === index)
+    .sort()
+    .join(", ");
 
-  registry.forEach((cmd) => {
-    text +=
-      text === ""
-        ? `${cmd.name.padEnd(10)} ${cmd.help}`
-        : `\n${cmd.name.padEnd(10)} ${cmd.help}`;
-  });
-
-  return text;
+  return `
+${commands}
+  `;
 }
 
 function generateDocs() {
@@ -175,6 +192,10 @@ const fileSystem = {
         guest: {
           type: "dir",
           children: {
+            "welcome.txt": {
+              type: "file",
+              content: WELCOME,
+            },
             "about.txt": {
               type: "file",
               content: `
@@ -304,15 +325,16 @@ function printFile(path) {
 const commands = [
   new Command({
     name: "about",
-    help: "A little bit about me",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   about - a little bit about me
 
 <bold>SYNOPSIS</bold>
   about
 
 <bold>DESCRIPTION</bold>
-  Shows some information about me.`,
+  Shows some information about me.
+`,
     run() {
       printFile("~/about.txt");
     },
@@ -320,15 +342,16 @@ const commands = [
 
   new Command({
     name: "contact",
-    help: "Ways to reach me",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   contact - ways to reach me
 
 <bold>SYNOPSIS</bold>
   contact
 
 <bold>DESCRIPTION</bold>
-  Displays my contact information`,
+  Displays my contact information
+`,
     run() {
       printFile("~/contact.txt");
     },
@@ -336,7 +359,6 @@ const commands = [
 
   new Command({
     name: "skills",
-    help: "My technical skills",
     man: `<bold>NAME</bold>
   skills - my technical skills
 
@@ -352,19 +374,19 @@ const commands = [
 
   new Command({
     name: "help",
-    help: "Lists all available commands",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   help - lists all available commands
 
 <bold>SYNOPSIS</bold>
   help
 
 <bold>DESCRIPTION</bold>
-  Displays a list of all available commands
-  along with a short description for each.
+  Displays a list of all available commands.
 
 <bold>SEE ALSO</bold>
-  man - display the manual page for a command`,
+  man - display the manual page for a command
+`,
     run() {
       printFile("/usr/local/share/help.txt");
     },
@@ -372,8 +394,8 @@ const commands = [
 
   new Command({
     name: "man",
-    help: "Displays the manual page for a command",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   man - displays the manual page for a command
 
 <bold>SYNOPSIS</bold>
@@ -383,7 +405,8 @@ const commands = [
   Displays the manual page for the specified command.
 
 <bold>SEE ALSO</bold>
-  help - list all available commands`,
+  help - list all available commands
+`,
     run([name]) {
       const cmd = registry.get(name);
 
@@ -398,8 +421,8 @@ const commands = [
 
   new Command({
     name: "ls",
-    help: "Lists directory contents horizontally",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   ls - lists directory contents horizontally
 
 <bold>SYNOPSIS</bold>
@@ -410,7 +433,8 @@ const commands = [
 
 <bold>SEE ALSO</bold>
   ll - list directory contents vertically
-  tree - prints directory tree`,
+  tree - prints directory tree
+`,
     run() {
       const dir = getNode(cwd);
 
@@ -425,8 +449,8 @@ const commands = [
 
   new Command({
     name: "ll",
-    help: "Lists directory contents vertically",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   ll - lists directory contents vertically
 
 <bold>SYNOPSIS</bold>
@@ -437,7 +461,8 @@ const commands = [
 
 <bold>SEE ALSO</bold>
   ls - list directory contents horizontally
-  tree - prints directory tree`,
+  tree - prints directory tree
+`,
     run() {
       const dir = getNode(cwd);
 
@@ -450,8 +475,8 @@ const commands = [
 
   new Command({
     name: "tree",
-    help: "Prints directory tree",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   tree - prints directory tree
 
 <bold>SYNOPSIS</bold>
@@ -462,7 +487,8 @@ const commands = [
 
 <bold>SEE ALSO</bold>
   ls - list directory contents horizontally
-  ll - list directory contents vertically`,
+  ll - list directory contents vertically
+`,
     run([path = ""]) {
       const target = resolvePath(path);
       const targetStr = target.join("/");
@@ -523,15 +549,16 @@ const commands = [
 
   new Command({
     name: "pwd",
-    help: "Prints working directory",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   pwd - prints working directory
 
 <bold>SYNOPSIS</bold>
   pwd
 
 <bold>DESCRIPTION</bold>
-  Prints the absolute path of the current working directory.`,
+  Prints the absolute path of the current working directory.
+`,
     run() {
       term.echo("/" + cwd.join("/"));
     },
@@ -539,15 +566,16 @@ const commands = [
 
   new Command({
     name: "cd",
-    help: "Changes directory",
-    man: `<bold>NAME</bold>
-  cd - changes directory
+    man: `
+<bold>NAME</bold>
+  cd - changes working directory
 
 <bold>SYNOPSIS</bold>
   cd DIRECTORY
 
 <bold>DESCRIPTION</bold>
-  Changes the current working directory.`,
+  Changes the current working directory.
+`,
     run([path = "~"]) {
       const target = resolvePath(path);
       const targetStr = target.join("/");
@@ -569,15 +597,16 @@ const commands = [
 
   new Command({
     name: "cat",
-    help: "Prints file contents",
-    man: `<bold>NAME</bold>
+    man: `
+<bold>NAME</bold>
   cat - prints file contents
 
 <bold>SYNOPSIS</bold>
   cat FILE
 
 <bold>DESCRIPTION</bold>
-  Prints the contents of the specified file to the terminal.`,
+  Prints the contents of the specified file to the terminal.
+`,
     run([path]) {
       printFile(path);
     },
