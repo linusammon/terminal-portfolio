@@ -5,13 +5,12 @@ const WELCOME = `
 Welcome to my little corner of the internet.
 It's like a terminal. Kinda. Close enough.
 
-Where to start:
-
+Some basic commands:
  <bold>-</bold> whoami
  <bold>-</bold> skills
  <bold>-</bold> contact
 
-Type <green>'help'</green> for a list of all commands.
+Type <green>'help'</green> for the rest.
 `;
 
 class Command {
