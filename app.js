@@ -7,7 +7,7 @@ It's like a terminal. Kinda. Close enough.
 
 Where to start:
 
- <bold>-</bold> about
+ <bold>-</bold> whoami
  <bold>-</bold> skills
  <bold>-</bold> contact
 
@@ -196,7 +196,7 @@ const fileSystem = {
               type: "file",
               content: WELCOME,
             },
-            "about.txt": {
+            "whoami.txt": {
               type: "file",
               content: `
 Hey, I'm Linus! No, not <i>that</i> Linus :p
@@ -324,19 +324,19 @@ function printFile(path) {
 
 const commands = [
   new Command({
-    name: "about",
+    name: "whoami",
     man: `
 <bold>NAME</bold>
-  about - a little bit about me
+  whoami - a little bit about me
 
 <bold>SYNOPSIS</bold>
-  about
+  whoami
 
 <bold>DESCRIPTION</bold>
   Shows some information about me.
 `,
     run() {
-      printFile("~/about.txt");
+      printFile("~/whoami.txt");
     },
   }),
 
