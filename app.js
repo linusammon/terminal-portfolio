@@ -6,6 +6,7 @@ Welcome to my little corner of the internet.
 It's like a terminal. Kinda. Close enough.
 
 Some basic commands:
+
  <bold>-</bold> whoami
  <bold>-</bold> skills
  <bold>-</bold> contact
